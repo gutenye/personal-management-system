@@ -17,6 +17,9 @@ services:
     build: 
       dockerfile: ./docker/nginx/Dockerfile 
       context: .
+      platforms:
+        - linux/arm64
+        - linux/amd64
     container_name: pms-nginx
     hostname: pms-nginx
     working_dir: /application
@@ -33,6 +36,9 @@ services:
     build: 
       dockerfile: ./docker/php-fpm/Dockerfile 
       context: .
+      platforms:
+        - linux/arm64
+        - linux/amd64
     container_name: pms-php-fpm
     hostname: pms-php-fpm
     # Executing original entrypoint, else php won't work,
@@ -67,7 +73,12 @@ services:
         --db-file=/mailpit/mail.db
 
     image: gutenye/personal-management-system-mailpit
-    build: ./docker/mailpit
+    build: 
+      dockerfile: ./docker/mailpit/Dockerfile
+      context: .
+      platforms:
+        - linux/arm64
+        - linux/amd64
     ports:
       - "8082:8025"
 
