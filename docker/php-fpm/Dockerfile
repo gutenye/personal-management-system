@@ -22,15 +22,17 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "unlink('composer-setup.php');" \
     && mv composer /usr/local/bin/composer
 
-COPY fpm-pool.conf /usr/local/etc/php-fpm.d/zz-docker.conf
-COPY php.ini /usr/local/etc/php/conf.d/php.ini
-COPY crontab/pms /etc/cron.d/pms
+COPY docker/php-fpm/fpm-pool.conf /usr/local/etc/php-fpm.d/zz-docker.conf
+COPY docker/php-fpm/php.ini /usr/local/etc/php/conf.d/php.ini
+COPY docker/php-fpm/crontab/pms /etc/cron.d/pms
 
 RUN chown root:root /etc/cron.d/pms && chmod 644 /etc/cron.d/pms
 
 RUN    apt-get update \
     && apt-get -y install gcc g++ make autoconf libc-dev pkg-config \
     && yes '' | pecl install apcu
+
+COPY ./ /application/
 
 RUN pear config-set php_ini /application/docker/php-fpm/php.ini
 
