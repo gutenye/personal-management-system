@@ -32,11 +32,15 @@ RUN    apt-get update \
     && apt-get -y install gcc g++ make autoconf libc-dev pkg-config \
     && yes '' | pecl install apcu
 
+WORKDIR /application
+
 COPY ./ /application/
 
 RUN pear config-set php_ini /application/docker/php-fpm/php.ini
 
 RUN curl -sLO https://github.com/gordalina/cachetool/releases/latest/download/cachetool.phar --create-dirs -O --output-dir /usr/bin && chmod +x /usr/bin/cachetool.phar
+
+ENTRYPOINT ["sh", "-c", "/usr/local/bin/docker-php-entrypoint && php-fpm -D && ./docker/php-fpm/entrypoint.bash && nano /tmp/keep"]
 
 CMD ["php-fpm"]
 
