@@ -32,6 +32,8 @@ RUN    apt-get update \
     && apt-get -y install gcc g++ make autoconf libc-dev pkg-config \
     && yes '' | pecl install apcu
 
+RUN apt-get install -y nano less cron;
+
 WORKDIR /application
 
 COPY ./ /application/
@@ -46,4 +48,3 @@ CMD ["php-fpm"]
 
 EXPOSE 9000
 
-RUN apt-get install -y nano less cron;
